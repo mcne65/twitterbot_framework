@@ -20,8 +20,12 @@
 
 import os
 import tweepy
-from secrets import *
 from time import gmtime, strftime
+from secrets import *
+
+auth = tweepy.OAuthHandler(C_KEY, C_SECRET)  
+auth.set_access_token(A_TOKEN, A_TOKEN_SECRET)  
+api = tweepy.API(auth)  
 
 
 # ====== Individual bot configuration ==========================
@@ -65,3 +69,5 @@ def log(message):
 if __name__ == "__main__":
     tweet_text = create_tweet()
     tweet(tweet_text)
+	
+	
