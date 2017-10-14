@@ -18,56 +18,25 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-import os
-import tweepy
-from time import gmtime, strftime
+import tweepy, sys, time
+import requests
 from secrets import *
 
-auth = tweepy.OAuthHandler(C_KEY, C_SECRET)  
-auth.set_access_token(A_TOKEN, A_TOKEN_SECRET)  
-api = tweepy.API(auth)  
-
-
-# ====== Individual bot configuration ==========================
-bot_username = ''
-logfile_name = bot_username + ".log"
-
-# ==============================================================
-
-
-def create_tweet():
-    """Create the text of the tweet you want to send."""
-    # Replace this with your code!
-    text = ""
-    return text
-
-
-def tweet(text):
-    """Send out the text as a tweet."""
-    # Twitter authentication
-    auth = tweepy.OAuthHandler(C_KEY, C_SECRET)
-    auth.set_access_token(A_TOKEN, A_TOKEN_SECRET)
+def tweetToTwitter():
+    auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
+    auth.set_access_token(access_key, access_secret)
     api = tweepy.API(auth)
-
-    # Send the tweet and log success or failure
-    try:
-        api.update_status(text)
-    except tweepy.error.TweepError as e:
-        log(e.message)
-    else:
-        log("Tweeted: " + text)
+    responeData = requests.get("http://api.icndb.com/jokes/random/?escape=javascript")
+    mystatustext = str(responeData.json()['value']['joke'])
+    api.update_status(status=mystatustext)
 
 
-def log(message):
-    """Log message to logfile."""
-    path = os.path.realpath(os.path.join(os.getcwd(), os.path.dirname(__file__)))
-    with open(os.path.join(path, logfile_name), 'a+') as f:
-        t = strftime("%d %b %Y %H:%M:%S", gmtime())
-        f.write("\n" + t + " " + message)
-
+def main():
+    print('Yolo from London Artz')
+while True:
+    tweetToTwitter()
+time.sleep(60)  # 1 minute
 
 if __name__ == "__main__":
-    tweet_text = create_tweet()
-    tweet(tweet_text)
-	
+    main()
 	
